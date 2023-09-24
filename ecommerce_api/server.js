@@ -7,6 +7,7 @@ import permissionsRoute from './route/permissionsRoute.js'
 import brandRoute from './route/brandRoute.js'
 import tagRoute from './route/tagRouter.js'
 import roleRoute from './route/roleRoute.js'
+import categoryRoute from './route/categoryRoute.js'
 import { connectMongoDB } from './config/db.js';
 import errorHandler from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
@@ -40,6 +41,7 @@ app.use('/api/v1/permissions', permissionsRoute );
 app.use('/api/v1/role', roleRoute );
 app.use('/api/v1/brands', brandRoute );
 app.use('/api/v1/tags', tagRoute );
+app.use('/api/v1/category', categoryRoute );
 
 // custom error
 app.use(errorHandler)
