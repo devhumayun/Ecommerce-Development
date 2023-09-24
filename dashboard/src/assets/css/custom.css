@@ -1,0 +1,14 @@
+
+/* Action Trash Button  */
+.trash-botton{
+    border: none !important;
+    background: transparent;
+    font-size: 18px !important;
+    color: red;
+}
+.edit-botton{
+    border: none !important;
+    background: transparent;
+    font-size: 18px !important;
+    color: #EFD30A;
+}

@@ -1,0 +1,22 @@
+/* Data table css */
+.dataTables_filter {
+    display: none !important;
+}
+.dataTables_length label {
+    display: flex;
+    gap: 7px;
+}
+.dataTables_length label select {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.dataTables_paginate {
+    display: flex !important;
+    justify-content: end !important;
+    gap: 7px !important;
+}
+.dataTables_info {
+    padding-top: 0px !important;
+    position: relative;
+    top: 20px;
+}
