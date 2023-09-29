@@ -1,24 +1,21 @@
 import multer from "multer";
 
 // create multer storage
+
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
-        if( file.fieldname = "cv") {
-            const { name, age } = req.body
-            cb(null, name + "_" + age + "_cv_" + file.originalname);
-        } else {
-            cb(null, Date.now() + "_" + file.originalname);
-        }
-    },
-    destination: (req, file, cb) => {
-        if(file.fieldname == "photo"){
-            cb(null, "public/photos")
-        }
+        cb(null, Date.now() + Math.round(Math.random() * 1000000) + "-" + file.fieldname)
     }
 })
 
-// export multer
-export const studentPhotosMulter = multer({ storage }).array(("studensts", 10));
+// const storage = multer.diskStorage({
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + Math.round(Math.random) * 1000000)
+//      +
+//       file.fieldname;
+//   },
+// });
 
-// export   
-export default storage
+
+// brand logo
+export const brandLogo = multer({ storage }).single("logo");
