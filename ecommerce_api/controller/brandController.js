@@ -112,18 +112,25 @@ export const updateBrand = asyncHandler(async (req, res) => {
   if (!name) {
     return res.status(400).json({ message: "Brand name is requried" });
   }
-
-  // get permission
-  const brand = await Brand.findByIdAndUpdate(id, {
-    name: name,
-    slug: slugify(name),
-  });
-
-  if (!brand) {
-    return res.status(400).json({ message: "Brand Not found" });
+  const updatedBrand = await Brand.findById(id)
+  if (!updatedBrand) {
+    return res.status(400).json({ message: "Brand data not found" });
   }
 
-  res.status(200).json({ message: "Brand updated successfull" });
+  let updatedLogo = updatedBrand.logo
+  if(req.file){
+    const publicId = cloudinaryPhotoPublicId(updatedBrand.logo)
+    cloudFileDelete(publicId)
+    const logo = await cloudUpload(req)
+    updatedLogo = logo.secure_url
+  }
+
+  updatedBrand.name = name
+  updatedBrand.logo = updatedLogo
+  updatedBrand.save()
+
+
+  res.status(200).json({brand: updateBrand, message: "Brand updated successfull" });
 });
 
 /**

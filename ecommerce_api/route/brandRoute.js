@@ -9,7 +9,7 @@ router.use(tokenVerify)
 
 // students route manage
 router.route('/').get(allBrands).post(brandLogo, createBrand)
-router.route('/:id').get(getSingleBrand).delete(deleteBrand).put(updateBrand).patch(updateBrand)
+router.route('/:id').get(getSingleBrand).delete(deleteBrand).put(brandLogo, updateBrand).patch(brandLogo, updateBrand)
 
 router.post("/status/:id", updateBrandStatus)
 
