@@ -47,13 +47,16 @@ export const createBrand = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Name already exists" });
   }
 
-
-  const logo = await cloudUpload(req);
+  let brandlogo = null
+  if(req.file){
+    const logo = await cloudUpload(req);
+    brandlogo = logo
+  }
   // create user
   const brand = await Brand.create({
     name: name,
     slug: slugify(name),
-    logo: logo.secure_url ? logo.secure_url : null,
+    logo: brandlogo.secure_url ? brandlogo.secure_url : null,
   });
 
   res.status(200).json({ brand, message: "brand created successfull" });

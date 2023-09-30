@@ -4,6 +4,8 @@ import Permission from "../models/Permission.js";
 import { slugify } from "../helpers/slug.js";
 import Brand from "../models/Brand.js";
 import Category from "../models/Category.js";
+import { cloudFileDelete, cloudUpload } from "../utils/cloudUpload.js";
+import { cloudinaryPhotoPublicId } from "../helpers/helpers.js";
 
 /**
  * @route /api/v1/category
@@ -51,7 +53,7 @@ export const allCategories = asyncHandler(async (req, res) => {
 
 export const createCategory = asyncHandler(async (req, res) => {
   // get body data
-  const { name, parentCategory } = req.body;
+  const { name, parentCategory, icon } = req.body;
 
   // validate input fields
   if (!name) {
@@ -65,11 +67,26 @@ export const createCategory = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "This category already exists" });
   }
 
+  // category icon
+  let catIcon = null
+  if(icon){
+    catIcon = icon
+  }
+
+  // category photo upload
+  let catPhoto = null
+  if(req.file){
+    const categoryPhoto = await cloudUpload(req)
+    catPhoto = categoryPhoto.secure_url
+  }
+
   // create user
   const category = await Category.create({
     name: name,
     slug: slugify(name),
+    icon: catIcon,
     parentCategory: parentCategory ? parentCategory : null,
+    photo: catPhoto
   });
 
   if (parentCategory) {
@@ -131,6 +148,12 @@ export const deleteCategory = asyncHandler(async (req, res) => {
   // get permission
   const category = await Category.findByIdAndDelete(id);
 
+  if(category.photo){
+    const publicId = cloudinaryPhotoPublicId(category.photo)
+    await cloudFileDelete(publicId)
+  }
+
+
   if (!category) {
     return res.status(400).json({ message: "Category Not found" });
   }
@@ -146,17 +169,15 @@ export const deleteCategory = asyncHandler(async (req, res) => {
  */
 export const updateCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, parentCategory, icon } = req.body;
 
   if (!name) {
     return res.status(400).json({ message: "Category name is requried" });
   }
 
-  // get permission
-  const category = await Category.findByIdAndUpdate(id, {
-    name: name,
-    slug: slugify(name),
-  });
+  // updated category
+  const 
+
 
   if (!category) {
     return res.status(400).json({ message: "Category Not found" });
