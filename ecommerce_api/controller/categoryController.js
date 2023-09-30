@@ -176,12 +176,38 @@ export const updateCategory = asyncHandler(async (req, res) => {
   }
 
   // updated category
-  const 
-
-
-  if (!category) {
+  const updatedCat = await Category.findById(id)
+  if (!updatedCat) {
     return res.status(400).json({ message: "Category Not found" });
   }
+
+  // update category icon
+  let updatedCatIcon = updatedCat.icon
+  if(icon){
+    updatedCatIcon = icon
+  }
+
+  // update parent category
+  let parentCat = updatedCat.parentCategory
+  if(parentCategory){
+    parentCat = parentCategory
+  }
+
+  // category photo update
+  let catPhoto = updatedCat.photo
+  if(req.file){
+    const publicId = cloudinaryPhotoPublicId(updatedCat.photo)
+    await cloudFileDelete(publicId)
+    const photo = await cloudUpload(req)
+    catPhoto = photo.secure_url
+  }
+
+  updatedCat.name = name
+  updatedCat.slug = slugify(name)
+  updatedCat.icon = updatedCatIcon
+  updatedCat.parentCategory = parentCat
+  updatedCat.photo = catPhoto
+  updatedCat.save()
 
   res.status(200).json({ message: "Category updated successfull" });
 });

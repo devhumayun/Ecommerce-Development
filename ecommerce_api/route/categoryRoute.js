@@ -9,6 +9,6 @@ router.use(tokenVerify)
 
 // students route manage
 router.route('/').get(allCategories).post(categoryPhoto, createCategory)
-router.route('/:id').get(getSingleCategory).delete(deleteCategory).put(updateCategory).patch(updateCategory)
+router.route('/:id').get(getSingleCategory).delete(deleteCategory).put(categoryPhoto, updateCategory).patch(categoryPhoto, updateCategory)
 
 export default router

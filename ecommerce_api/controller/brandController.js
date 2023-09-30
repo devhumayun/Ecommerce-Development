@@ -129,6 +129,7 @@ export const updateBrand = asyncHandler(async (req, res) => {
   }
 
   updatedBrand.name = name
+  updatedBrand.slug = slugify(name)
   updatedBrand.logo = updatedLogo
   updatedBrand.save()
 
