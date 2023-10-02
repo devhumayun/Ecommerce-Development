@@ -19,14 +19,12 @@ const productSchema = mongoose.Schema(
     productSimple: {
       regularPrice: {
         type: Number,
-        requried: true,
       },
       salePrice: {
         type: Number,
       },
       productPhotos: {
         type: [String],
-        requried: true,
       },
       sku: {
         type: Number,
@@ -45,14 +43,12 @@ const productSchema = mongoose.Schema(
         },
         regularPrice: {
           type: Number,
-          requried: true,
         },
         salePrice: {
           type: Number,
         },
         productPhotos: {
           type: [String],
-          requried: true,
         },
         sku: {
           type: Number,
@@ -64,18 +60,15 @@ const productSchema = mongoose.Schema(
       {
         name: {
           type: String,
-          requried: true,
         },
         regularPrice: {
           type: Number,
-          requried: true,
         },
         salePrice: {
           type: Number,
         },
         productPhotos: {
           type: [String],
-          requried: true,
         },
         sku: {
           type: Number,
@@ -86,14 +79,12 @@ const productSchema = mongoose.Schema(
     productExternal: {
       regularPrice: {
         type: Number,
-        requried: true,
       },
       salePrice: {
         type: Number,
       },
       productPhotos: {
         type: [String],
-        requried: true,
       },
       sku: {
         type: Number,
@@ -101,7 +92,6 @@ const productSchema = mongoose.Schema(
       },
       link: {
         type: String,
-        requried: true,
       },
     },
     shortDesc: {
@@ -120,7 +110,7 @@ const productSchema = mongoose.Schema(
     categories: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Category",
-      require: true,
+      // require: true,
     },
     tags: {
       type: [mongoose.Schema.Types.ObjectId],
