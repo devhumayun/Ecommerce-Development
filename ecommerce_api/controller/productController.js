@@ -30,7 +30,7 @@ export const allProducts = asyncHandler(async (req, res) => {
 
 export const createProduct = asyncHandler(async (req, res) => {
   // get body data
-  const { name } = req.body;
+  const { name, productType, productSimple, productVariable, productGroup, productExternal, shortDesc, longDesc } = req.body;
 
   // validate input fields
   if (!name) {
@@ -38,25 +38,26 @@ export const createProduct = asyncHandler(async (req, res) => {
   }
 
   // check brand name is exists
-  const checkName = await Brand.findOne({ name });
+  const checkName = await Product.findOne({ name });
 
   if (checkName) {
-    return res.status(400).json({ message: "Name already exists" });
+    return res.status(400).json({ message: "Product already exists with this name!" });
   }
 
-  let brandlogo = null
-  if(req.file){
-    const logo = await cloudUpload(req);
-    brandlogo = logo
-  }
   // create user
-  const brand = await Brand.create({
+  const product = await Product.create({
     name: name,
     slug: slugify(name),
-    logo: brandlogo.secure_url ? brandlogo.secure_url : null,
+    productType,
+    productSimple: productType === "simple" ? productSimple : null,
+    productVariable: productType === "variable" ? productVariable : null,
+    productGroup: productType === "group" ? productGroup : null,
+    productExternal: productType === "external" ? productExternal : null,
+    shortDesc,
+    longDesc
   });
 
-  res.status(200).json({ brand, message: "brand created successfull" });
+  res.status(200).json({ product, message: "Product created successfull" });
 });
 
 /**

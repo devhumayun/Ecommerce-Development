@@ -43,7 +43,7 @@ app.use('/api/v1/role', roleRoute );
 app.use('/api/v1/brands', brandRoute );
 app.use('/api/v1/tags', tagRoute );
 app.use('/api/v1/category', categoryRoute );
-app.use('/api/v1/products', productRoute );
+app.use('/api/v1/product', productRoute );
 
 // custom error
 app.use(errorHandler)
