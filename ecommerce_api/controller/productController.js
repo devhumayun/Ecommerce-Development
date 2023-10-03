@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { slugify } from "../helpers/slug.js";
 import Product from "../models/Product.js";
+import { cloudUploads } from "../utils/cloudUpload.js";
 
 
 /**
@@ -44,12 +45,23 @@ export const createProduct = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Product already exists with this name!" });
   }
 
+  // file manage
+  let productPhotos = []
+  if(req.files){
+    for (let i = 0; i < req.files.length; i++) {
+      const productFiles = await cloudUploads(req.files[i].path)
+      productPhotos.push(productFiles)
+    }
+  }
+
+  const simpleProductData = JSON.parse(productSimple)
+
   // create user
   const product = await Product.create({
     name: name,
     slug: slugify(name),
     productType,
-    productSimple: productType === "simple" ? productSimple : null,
+    productSimple: productType === "simple" ? {...simpleProductData, productPhotos} : null,
     productVariable: productType === "variable" ? productVariable : null,
     productGroup: productType === "group" ? productGroup : null,
     productExternal: productType === "external" ? productExternal : null,

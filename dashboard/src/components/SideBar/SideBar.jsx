@@ -5,6 +5,8 @@ const SideBar = () => {
   const location = useLocation();
   const { user } = useAuthUser();
 
+  console.log(user);
+
   return (
     <>
       <div className="sidebar" id="sidebar">

@@ -15,6 +15,13 @@ export const cloudUpload = async (req) => {
     return data
 }
 
+
+// upload file
+export const cloudUploads = async (path) => {
+    const data = await cloudinary.v2.uploader.upload(path)
+    return data.secure_url
+}
+
 // deletefile
 export const cloudFileDelete = async (publicId) => {
     const data = await cloudinary.v2.uploader.destroy(publicId)

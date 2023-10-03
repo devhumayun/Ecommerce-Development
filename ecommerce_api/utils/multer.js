@@ -14,3 +14,6 @@ export const brandLogo = multer({ storage }).single("logo");
 // category photo
 export const categoryPhoto = multer({ storage }).single("catPhoto");
 
+// products photo
+export const productPhoto = multer({ storage }).array("productPhoto");
+
