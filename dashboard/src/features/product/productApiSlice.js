@@ -2,10 +2,23 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
-// Create new Role
+// Create new Brand
 export const createBrand = createAsyncThunk("product/createBrand", async(data) => {
     try {
         const response = await axios.post(`http://localhost:8080/api/v1/brands`, data,{
+            withCredentials: true
+        })
+
+        return response.data
+    } catch (error) {
+        throw new Error(error.response.data.message)
+    }
+})
+
+// get all brand
+export const AllBrands = createAsyncThunk("product/AllBrands", async() => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/v1/brands`,{
             withCredentials: true
         })
 

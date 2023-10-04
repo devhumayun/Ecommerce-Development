@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getLoggedInUser } from "./features/auth/authApiSlice";
 import { getAllPermission, getAllRole, getAllUsers } from "./features/user/userApiSlice";
+import { AllBrands } from "./features/product/productApiSlice";
 
 function App() {
 
@@ -17,11 +18,12 @@ function App() {
     }
   },[dispatch])
 
-  // Load All Permissions
+  // Load All
   useEffect(() => {
     dispatch(getAllPermission());
     dispatch(getAllRole())
     dispatch(getAllUsers())
+    dispatch(AllBrands());
   }, [dispatch]);
 
 

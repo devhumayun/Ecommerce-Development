@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalPopup from "../../components/ModalPopup/ModalPopup";
 import PageTitle from "../../components/PageTitle/PageTitle";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBrand } from "../../features/product/productApiSlice";
 import useFormFields from "../../hooks/useFormFields";
+import { createToast } from "../../utlis/toast";
+import { setMessageEmpty } from "../../features/product/productSlice";
+import DataTable from 'react-data-table-component';
 
 const Brand = () => {
 
@@ -21,6 +24,8 @@ const Brand = () => {
       name: "",
     });
 
+    const {error, message, loader, brand} = useSelector(state => state.product)
+
   // Add brand from
   const form_data = new FormData()
   form_data.append("name", input.name)
@@ -31,6 +36,18 @@ const Brand = () => {
     dispatch(createBrand(form_data))
     formEmpty()
   };
+
+    // for message manage
+    useEffect(() => {
+      if (error) {
+        createToast(error);
+        dispatch(setMessageEmpty());
+      }
+      if (message) {
+        createToast(message, "success");
+        dispatch(setMessageEmpty());
+      }
+    }, [error, message, dispatch]);
 
 
 
@@ -65,7 +82,7 @@ const Brand = () => {
           </div>
 
           <div className="my-3">
-            <button className="btn btn-primary btn-block"> Add Brand</button>
+            <button className="btn btn-primary btn-block">{loader ? "Creating brand . . ." : "Add New Brand"}</button>
           </div>
         </form>
       </ModalPopup>
@@ -81,6 +98,9 @@ const Brand = () => {
           </button>
         </div>
       </div>
+      <br />
+      <br />
+      <DataTable />
     </>
   );
 };

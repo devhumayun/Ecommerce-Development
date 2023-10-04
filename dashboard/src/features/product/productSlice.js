@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createBrand } from "./productApiSlice";
+import { AllBrands, createBrand } from "./productApiSlice";
 
 
 // create a auth slice
@@ -12,6 +12,7 @@ const productSlice = createSlice({
         tag: null,
         message: null,
         error: null,
+        loader: false
     },
     reducers: {
         setMessageEmpty: (state,action) => {
@@ -20,13 +21,30 @@ const productSlice = createSlice({
          }
     },
     extraReducers: (builder) => {
-        builder.addCase(createBrand.rejected, (state, action) => {
+        builder
+        .addCase(createBrand.pending, (state, action) => {
+            state.loader = true
+        })
+        .addCase(createBrand.rejected, (state, action) => {
             state.error = action.error.message
+            state.loader = false
         })
         .addCase(createBrand.fulfilled, (state, action) => {
             state.brand = state.brand ?? []
             state.brand.push(action.payload.brand)
             state.message = action.payload.message
+            state.loader = false
+        })
+        .addCase(AllBrands.pending, (state, action) => {
+            state.loader = true
+        })
+        .addCase(AllBrands.rejected, (state, action) => {
+            state.error = action.error.message
+            state.loader = false
+        })
+        .addCase(AllBrands.fulfilled, (state, action) => {
+            state.brand = action.payload
+            state.loader = false
         })
     }
 })
