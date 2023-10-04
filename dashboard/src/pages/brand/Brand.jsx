@@ -1,19 +1,37 @@
 import { useState } from "react";
 import ModalPopup from "../../components/ModalPopup/ModalPopup";
 import PageTitle from "../../components/PageTitle/PageTitle";
+import { useDispatch } from "react-redux";
+import { createBrand } from "../../features/product/productApiSlice";
+import useFormFields from "../../hooks/useFormFields";
 
 const Brand = () => {
 
-  const [logoPrev, setLogoPrev] = useState("")
+  const [logo, setLogo] = useState(null)
+  const [logoPrev, setLogoPrev] = useState(null)
+  const dispatch = useDispatch()
   // logo preview
   const handleLogoPrev = (e) => {
     setLogoPrev(URL.createObjectURL(e.target.files[0]))
+    setLogo(e.target.files[0])
   }
 
-  // Add user form
+    // call use form fields hook
+    const { input, handleInputChange, formEmpty } = useFormFields({
+      name: "",
+    });
+
+  // Add brand from
+  const form_data = new FormData()
+  form_data.append("name", input.name)
+  form_data.append("logo", logo)
+
   const handleAddUserForm = (e) => {
     e.preventDefault();
+    dispatch(createBrand(form_data))
+    formEmpty()
   };
+
 
 
   return (
@@ -26,6 +44,8 @@ const Brand = () => {
             <input
               name="name"
               type="text"
+              value={input.name}
+              onChange={handleInputChange}
               className="form-control"
             />
           </div>
