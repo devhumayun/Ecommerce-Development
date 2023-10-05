@@ -20,3 +20,13 @@
     position: relative;
     top: 20px;
 }
+
+/* Data table css ==> react data table components */
+.rdt_TableCell{
+    font-size: 15px !important;
+    font-family: inherit !important;
+}
+.rdt_TableHead {
+    font-size: 18px !important;
+    font-family: inherit !important; 
+}
