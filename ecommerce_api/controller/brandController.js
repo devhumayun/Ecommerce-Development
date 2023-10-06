@@ -143,22 +143,45 @@ export const updateBrand = asyncHandler(async (req, res) => {
  * @method get
  * @access private
  */
+// export const updateBrandStatus = asyncHandler(async (req, res) => {
+//   const { id } = req.params;
+//   console.log(id)
+//   // const { status } = req.body;
+
+//   // // update permission
+//   const updatedBrandStatus = await Brand.findByIdAndUpdate(
+//     id,
+//     {
+//       status: !status,
+//     },
+//     {
+//       new: true,
+//     }
+//   );
+
+//   res
+//     .status(200)
+//     .json({ updatedBrandStatus, message: "Status updated successfull" });
+// });
+
 export const updateBrandStatus = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
 
-  // update permission
-  const updatedBrandStatus = await Brand.findByIdAndUpdate(
-    id,
-    {
-      status: !status,
-    },
-    {
-      new: true,
-    }
-  );
+    // update brand data
+    const brand = await Brand.findByIdAndUpdate(
+      id,
+      {
+        status: !status,
+      },
+      { new: true }
+    );
 
-  res
-    .status(200)
-    .json({ updatedBrandStatus, message: "Status  updated successfull" });
+    return res
+      .status(200)
+      .json({ brand, message: 'Status updated successful' });
+  } catch (error) {
+    next(createError('brand status update not found', 400));
+  }
 });

@@ -66,12 +66,6 @@ const Brand = () => {
     });
   }
 
-  // brand status update
-  // const handleStatusUpdate = (id, status) => {
-  //   dispatch(brandStatusUpdate({id, status}))
-  // }
-
-  
   // Data table for brands
   const columns = [
     {
@@ -91,14 +85,12 @@ const Brand = () => {
       name: "Status",
       selector: (row) => (
         <>
-
-          <button onClick={handleTest(row.name)}> test</button>
-          {/* <div className="status-toggle">
-            <input onClick={() => handleStatusUpdate(console.log(row._id), row.status)} type="checkbox" id="status_1" className="check" checked={row.status ? true : false} />
-            <label htmlFor="status_1" className="checktoggle">
+          <div className="status-toggle">
+            <input type="checkbox" id="status_1" className="check" checked={row.status ? true : false} />
+            <label onClick={() => handleStatusUpdate(row._id, row.status)} htmlFor="status_1" className="checktoggle">
               checkbox
             </label>
-          </div> */}
+          </div>
         </>
       ),
     },
@@ -132,8 +124,10 @@ const Brand = () => {
     },
   ];
 
-  const handleTest = (id) => {
-    alert()
+  // brand status update
+  const handleStatusUpdate = (id, status) => {
+    dispatch(brandStatusUpdate({id, status}))
+    
   }
 
   // for message manage
