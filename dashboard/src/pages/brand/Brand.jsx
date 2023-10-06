@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import ModalPopup from "../../components/ModalPopup/ModalPopup";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import { useDispatch, useSelector } from "react-redux";
-import { createBrand } from "../../features/product/productApiSlice";
+import { brandStatusUpdate, createBrand, deleteBrand } from "../../features/product/productApiSlice";
 import useFormFields from "../../hooks/useFormFields";
 import { createToast } from "../../utlis/toast";
 import { setMessageEmpty } from "../../features/product/productSlice";
 import DataTable from "react-data-table-component";
 import { timeago } from "../../helper/healper";
+import swal from "sweetalert";
 
 const Brand = () => {
   const [logo, setLogo] = useState(null);
@@ -45,6 +46,32 @@ const Brand = () => {
     setSearch(value)
   }
 
+  // delete brand
+  const handleBrandDelete = (id) => {
+    swal({
+      title: "Delete Brand",
+      text: "Are you sure",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Poof! Brand Deleted Successfull!", {
+          icon: "success",
+        });
+        dispatch(deleteBrand(id));
+      } else {
+        swal("Your imaginary file is safe!");
+      }
+    });
+  }
+
+  // brand status update
+  // const handleStatusUpdate = (id, status) => {
+  //   dispatch(brandStatusUpdate({id, status}))
+  // }
+
+  
   // Data table for brands
   const columns = [
     {
@@ -64,19 +91,21 @@ const Brand = () => {
       name: "Status",
       selector: (row) => (
         <>
-          <div className="status-toggle">
-            <input type="checkbox" id="status_1" className="check" checked />
+
+          <button onClick={handleTest(row.name)}> test</button>
+          {/* <div className="status-toggle">
+            <input onClick={() => handleStatusUpdate(console.log(row._id), row.status)} type="checkbox" id="status_1" className="check" checked={row.status ? true : false} />
             <label htmlFor="status_1" className="checktoggle">
               checkbox
             </label>
-          </div>
+          </div> */}
         </>
       ),
     },
     {
       name: "Logo",
       selector: (row) => <>
-        <img style={{width: "45px", height:"45px", objectFit: "cover", borderRadius:"5px"}} src={row.logo} alt="" />
+        <img style={{width: "50px", height:"50px", objectFit: "contain", borderRadius:"5px", margin: "5px"}} src={row.logo} alt="" />
       </>
     },
     {
@@ -93,6 +122,7 @@ const Brand = () => {
             </button>
             <button
               className="trash-botton"
+              onClick={() => handleBrandDelete(row._id)}
             >
               <i className="fa fa-trash"></i>
             </button>
@@ -101,6 +131,10 @@ const Brand = () => {
       ),
     },
   ];
+
+  const handleTest = (id) => {
+    alert()
+  }
 
   // for message manage
   useEffect(() => {
