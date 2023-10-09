@@ -122,6 +122,7 @@ const Role = () => {
   return (
     <>
       <PageTitle title="Role" />
+
       <ModalPopup target="roleModal">
         <p>
           <form onSubmit={handleRoleForm}>
@@ -157,6 +158,7 @@ const Role = () => {
           </form>
         </p>
       </ModalPopup>
+
       <ModalPopup target="roleEditModal">
         <p>
           <form onSubmit={handleRoleEditForm}>
@@ -204,7 +206,7 @@ const Role = () => {
           </button>
           <div className="card card-table">
             <div className="card-header">
-              <h4 className="card-title">Appointment List</h4>
+              <h4 className="card-title">User Role List</h4>
             </div>
             <div className="card-body" style={{ padding: "20px" }}>
               <div className="table-responsive">

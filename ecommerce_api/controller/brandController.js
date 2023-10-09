@@ -143,26 +143,6 @@ export const updateBrand = asyncHandler(async (req, res) => {
  * @method get
  * @access private
  */
-// export const updateBrandStatus = asyncHandler(async (req, res) => {
-//   const { id } = req.params;
-//   console.log(id)
-//   // const { status } = req.body;
-
-//   // // update permission
-//   const updatedBrandStatus = await Brand.findByIdAndUpdate(
-//     id,
-//     {
-//       status: !status,
-//     },
-//     {
-//       new: true,
-//     }
-//   );
-
-//   res
-//     .status(200)
-//     .json({ updatedBrandStatus, message: "Status updated successfull" });
-// });
 
 export const updateBrandStatus = asyncHandler(async (req, res) => {
   try {
