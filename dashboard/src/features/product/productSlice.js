@@ -2,10 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   AllBrands,
   brandStatusUpdate,
+  categoryStatusUpdate,
   createBrand,
+  createCategory,
   createTag,
   deleteBrand,
+  deleteCategory,
   deleteTag,
+  getAllCategories,
   getAllTags,
   tagDataEdit,
   tagStatusUpdate,
@@ -114,6 +118,40 @@ const productSlice = createSlice({
         state.tag[
           state.tag.findIndex((data) => data._id === action.payload.tag._id)
         ] = action.payload.tag;
+        state.message = action.payload.message;
+      })
+      .addCase(getAllCategories.fulfilled, (state, action) => {
+        state.category = action.payload.category
+      })
+      .addCase(createCategory.pending, (state, action) => {
+        state.loader = true;
+      })
+      .addCase(createCategory.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loader = false;
+      })
+      .addCase(createCategory.fulfilled, (state, action) => {
+        state.category = state.category ?? [];
+        state.category.push(action.payload.category);
+        state.message = action.payload.message;
+        state.loader = false;
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.category = state.category.filter(
+          (data) => data._id != action.payload.category._id
+        );
+        state.message = action.payload.message;
+      })
+      .addCase(categoryStatusUpdate.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(categoryStatusUpdate.fulfilled, (state, action) => {
+        state.category[
+          state.category.findIndex((data) => data._id === action.payload.category._id)
+        ] = action.payload.category;
         state.message = action.payload.message;
       });
   },

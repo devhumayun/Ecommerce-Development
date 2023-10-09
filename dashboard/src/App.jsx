@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getLoggedInUser } from "./features/auth/authApiSlice";
 import { getAllPermission, getAllRole, getAllUsers } from "./features/user/userApiSlice";
-import { AllBrands, getAllTags } from "./features/product/productApiSlice";
+import { AllBrands, getAllCategories, getAllTags } from "./features/product/productApiSlice";
 
 function App() {
 
@@ -25,6 +25,7 @@ function App() {
     dispatch(getAllUsers())
     dispatch(AllBrands());
     dispatch(getAllTags())
+    dispatch(getAllCategories())
   }, [dispatch]);
 
 

@@ -40,7 +40,7 @@ export const allCategories = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: "Category Not Found" });
   }
   if (category.length > 0) {
-    return res.status(200).json(category);
+    return res.status(200).json({category});
   }
 });
 
@@ -210,4 +210,34 @@ export const updateCategory = asyncHandler(async (req, res) => {
   updatedCat.save()
 
   res.status(200).json({ message: "Category updated successfull" });
+});
+
+
+/**
+ * @route /api/v1/category/status/:id
+ * @desc Update brand status
+ * @method post
+ * @access private
+ */
+
+export const updateCatStatus = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // update brand data
+    const category = await Category.findByIdAndUpdate(
+      id,
+      {
+        status: !status,
+      },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ category, message: 'Status updated successful' });
+  } catch (error) {
+    next(createError(' Category Updating status failed ', 400));
+  }
 });

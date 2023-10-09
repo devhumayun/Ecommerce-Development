@@ -160,3 +160,70 @@ export const tagDataEdit = createAsyncThunk(
     }
   }
 );
+
+// get all categories
+export const getAllCategories = createAsyncThunk("product/getAllCategories", async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/v1/category`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});
+
+// create category
+export const createCategory = createAsyncThunk("product/createCategory", async (data) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/api/v1/category`,
+      data,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});
+
+// delete category
+export const deleteCategory = createAsyncThunk("product/deleteCategory", async (id) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8080/api/v1/category/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});
+
+
+// category status update
+export const categoryStatusUpdate = createAsyncThunk(
+  "product/categoryStatusUpdate",
+  async ({ id, status }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/category/status/${id}`,
+        {
+          status,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
