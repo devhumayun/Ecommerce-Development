@@ -4,8 +4,10 @@ import PageTitle from "../../components/PageTitle/PageTitle";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoryStatusUpdate,
+  categoryUpdate,
   createCategory,
   deleteCategory,
+  getAllCategories,
 } from "../../features/product/productApiSlice";
 import useFormFields from "../../hooks/useFormFields";
 import { createToast } from "../../utlis/toast";
@@ -13,6 +15,8 @@ import { setMessageEmpty } from "../../features/product/productSlice";
 import DataTable from "react-data-table-component";
 import { timeago } from "../../helper/healper";
 import swal from "sweetalert";
+import { photoChange } from "../../utlis/tools";
+import UpdateCategory from "./UpdateCategory";
 
 const Category = () => {
   // Data table for brands
@@ -24,12 +28,13 @@ const Category = () => {
     },
     {
       name: "Sub Category",
-      selector: (row) => row.subCategory?.map((item,index) => {
-        return(
-          <li style={{listStyle:"none"}} key={index}> { "-" + " " + item.name} </li>
-        )
-      }),
-      sortable: true,
+      selector: (row) => (
+        <ul>
+          {row.subCategory?.map((subCat, index) => (
+            <li key={index}>{subCat.name}</li>
+          ))}
+        </ul>
+      ),
     },
     {
       name: "Slug",
@@ -41,7 +46,7 @@ const Category = () => {
     },
     {
       name: "Icon",
-      selector: (row) => row.icon ? row.icon : "-",
+      selector: (row) => (row.icon ? row.icon : "-"),
     },
     {
       name: "Logo",
@@ -89,9 +94,10 @@ const Category = () => {
         <>
           <td className="text-right">
             <button
-              data-target="#brandEditModal"
+              data-target="#categorydEditModal"
               data-toggle="modal"
               className="edit-botton"
+              onClick={() => setCategoryEdit(row._id)}
             >
               <i className="fa fa-edit"></i>
             </button>
@@ -106,36 +112,33 @@ const Category = () => {
       ),
     },
   ];
-
-  const [logo, setLogo] = useState(null);
-  const [catPhoto, setCatPhoto] = useState(null);
-  const [search, setSearch] = useState("");
-  const dispatch = useDispatch();
-  // logo preview
-  const handleLogoPrev = (e) => {
-    setCatPhoto(URL.createObjectURL(e.target.files[0]));
-    setLogo(e.target.files[0]);
-  };
-
-  // call use form fields hook
-  const { input, handleInputChange, formEmpty } = useFormFields({
-    name: "",
-    icon: "",
-    parent: ""
-  });
-
-  console.log(input);
-
   const { error, message, loader, category } = useSelector(
     (state) => state.product
   );
+  const [categoryEdit, setCategoryEdit] = useState({});
+  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+
+  // call use form fields hook
+  const { input, handleInputChange, formEmpty, setInput } = useFormFields({
+    name: "",
+    icon: "",
+    parent: "",
+    photo: null,
+    logo: null,
+  });
+
+  // logo preview
+  const handleLogoPrev = (e) => {
+    photoChange(setInput, e);
+  };
 
   // Add brand from
   const form_data = new FormData();
   form_data.append("name", input.name);
   form_data.append("parentCategory", input.parent);
   form_data.append("icon", input.icon);
-  form_data.append("catPhoto", logo);
+  form_data.append("catPhoto", input.logo);
 
   const handleAddCategoryForm = (e) => {
     e.preventDefault();
@@ -168,9 +171,39 @@ const Category = () => {
     });
   };
 
-  // brand status update
+  // category status update
   const handleCatStatusUpdate = (id, status) => {
     dispatch(categoryStatusUpdate({ id, status }));
+  };
+
+  // category edit
+  const handleCategoryEdit = (id) => {
+    const catData = category.find((data) => data._id === id);
+    // setCategoryEdit(catData)
+    setInput(catData);
+  };
+
+  // Edit logo preview
+  const handleEditLogoPrev = (e) => {
+    photoChange(setCategoryEdit, e);
+  };
+
+  const handleInputUpdateChange = (e) => {
+    setCategoryEdit((preState) => ({
+      ...preState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const form_update = new FormData();
+  form_update.append("name", categoryEdit.name);
+  form_update.append("parentCategory", categoryEdit.parentCategory);
+  form_update.append("icon", categoryEdit.icon);
+  form_update.append("catPhoto", categoryEdit.photo);
+  const handleUpdateCategoryForm = (e) => {
+    e.preventDefault();
+    let id = categoryEdit._id;
+    dispatch(categoryUpdate({ data: form_update, id: id }));
   };
 
   // for message manage
@@ -184,6 +217,7 @@ const Category = () => {
       dispatch(setMessageEmpty());
     }
   }, [error, message, dispatch]);
+  dispatch(getAllCategories())
 
   return (
     <>
@@ -212,20 +246,25 @@ const Category = () => {
           </div>
           <div className="my-3">
             <label>Parent Category</label>
-            <select name="parent" value={input.parent}  onChange={handleInputChange}  className="form-control">
+            <select
+              name="parent"
+              value={input.parent}
+              onChange={handleInputChange}
+              className="form-control"
+            >
               <option value=""> -select- </option>
-              {
-                category?.map((item, index) => {
-                  return (
-                    <option key={index} value={item._id}>{item.name}</option>
-                  )
-                })
-              }
+              {category?.map((item, index) => {
+                return (
+                  <option key={index} value={item._id}>
+                    {item.name}
+                  </option>
+                );
+              })}
             </select>
           </div>
-          {catPhoto && (
+          {input.photo && (
             <div className="my-3">
-              <img style={{ width: "100%" }} src={catPhoto} alt="" />
+              <img style={{ width: "100%" }} src={input.photo} alt="" />
             </div>
           )}
           <div className="my-3">
@@ -245,6 +284,62 @@ const Category = () => {
           </div>
         </form>
       </ModalPopup>
+      <UpdateCategory categoryEdit={categoryEdit} modal="categorydEditModal" />
+      {/* <ModalPopup target="categorydEditModal">
+        <form onSubmit={handleUpdateCategoryForm}>
+          <div className="my-3">
+            <label>Category Name</label>
+            <input
+              name="name"
+              type="text"
+              value={categoryEdit.name}
+              onChange={handleInputUpdateChange}
+              className="form-control"
+            />
+          </div>
+          <div className="my-3">
+            <label>Category Icon</label>
+            <input
+              name="icon"
+              type="text"
+              value={categoryEdit.icon}
+              onChange={handleInputUpdateChange}
+              className="form-control"
+            />
+          </div>
+          <div className="my-3">
+            <label>Parent Category</label>
+            <select name="parentCategory" value={categoryEdit.parentCategory}  onChange={handleInputUpdateChange}  className="form-control">
+              <option value=""> {categoryEdit.parentCategory?.name ? categoryEdit.parentCategory?.name : "-select-"} </option>
+              {
+                category?.map((item, index) => {
+                  return (
+                    <option key={index} value={item._id}>{item.name}</option>
+                  )
+                })
+              }
+            </select>
+          </div>
+            <div className="my-3">
+              <img style={{ width: "100%" }} src={categoryEdit.photo} alt="" />
+            </div>
+          <div className="my-3">
+            <label>Category Photo</label>
+            <input
+              name="catPhoto"
+              type="file"
+              className="form-control"
+              onChange={(e) => handleEditLogoPrev(e)}
+            />
+          </div>
+
+          <div className="my-3">
+            <button className="btn btn-primary btn-block">
+              {loader ? "Creating Category . . ." : "Add New Category"}
+            </button>
+          </div>
+        </form>
+      </ModalPopup> */}
       <div className="row">
         <div className="col-md-12">
           <button

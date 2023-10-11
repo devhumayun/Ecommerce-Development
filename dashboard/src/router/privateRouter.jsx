@@ -4,6 +4,7 @@ import Category from "../pages/category/Category";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Order from "../pages/order/order";
 import Permission from "../pages/permission/Permission";
+import CreateProduct from "../pages/products/CreateProduct";
 import Product from "../pages/products/Product";
 import Role from "../pages/role/Role";
 import Tag from "../pages/tag/Tag";
@@ -46,6 +47,10 @@ const privateRouter = [
           {
             path: "/product",
             element: <Product />,
+          },
+          {
+            path: "/create-product",
+            element: <CreateProduct />,
           },
           {
             path: "/tag",

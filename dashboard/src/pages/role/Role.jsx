@@ -21,7 +21,6 @@ const Role = () => {
     getUserPermissionData
   );
   const dispatch = useDispatch();
-  console.log(role);
 
   // state for checkbox
   const [selected, setSelected] = useState([]);

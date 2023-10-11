@@ -209,7 +209,7 @@ export const updateCategory = asyncHandler(async (req, res) => {
   updatedCat.photo = catPhoto
   updatedCat.save()
 
-  res.status(200).json({ message: "Category updated successfull" });
+res.status(200).json({ message: "Category updated successfull" });
 });
 
 

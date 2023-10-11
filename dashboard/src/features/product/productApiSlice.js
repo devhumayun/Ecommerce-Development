@@ -227,3 +227,23 @@ export const categoryStatusUpdate = createAsyncThunk(
     }
   }
 );
+
+
+// category update
+export const categoryUpdate = createAsyncThunk(
+  "product/categoryUpdate",
+  async ({data, id }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/v1/category/${id}`,data,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);

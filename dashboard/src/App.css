@@ -1,0 +1,6 @@
+
+
+/* Hide jodit text editor sponser status */
+a.jodit-status-bar-link {
+    display: none !important;
+}

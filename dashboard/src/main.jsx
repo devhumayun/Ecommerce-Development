@@ -9,6 +9,7 @@ import './assets/css/select2.min.css'
 import './assets/css/style.css'
 import './assets/css/custom.css'
 import './index.css'
+import './App.css'
 import { Provider } from 'react-redux'
 import store from './app/store.js'
 
